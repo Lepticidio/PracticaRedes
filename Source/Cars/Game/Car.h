@@ -8,6 +8,7 @@
 
 class UCarMovementComponent;
 class UNetComponent;
+class CGameNetMgr;
 
 UCLASS()
 class CARS_API ACar : public APawn
@@ -25,6 +26,7 @@ public:
   float GetVelocityMagnitude() const;
 
   void SetInput(const FVector2D& _vInput) { m_vMovementInput = _vInput; }
+  void SetManager(CGameNetMgr* _newValue);
 
   UNetComponent* GetNetComponent() const { return m_pNet; }
   UCarMovementComponent* GetCarMovement() { return m_pCarMovement; }
@@ -36,6 +38,7 @@ protected:
   //Input
   void Move(float AxisValue);
   void Turn(float AxisValue);
+  void CreateTrap();
 
 protected:
   //Mesh
@@ -47,6 +50,8 @@ protected:
 
   UPROPERTY(EditAnywhere)
   UNetComponent* m_pNet;
+
+  CGameNetMgr* m_pManager;
 
 
   //Input

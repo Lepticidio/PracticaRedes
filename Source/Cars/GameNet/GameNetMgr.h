@@ -21,6 +21,8 @@ public:
 
 private:
   void CreateCar(unsigned int _uClient, FVector _vPos);
+public:
+  void CreateTrap(ACar* _pCar);
 
 private:
   Net::CManager* m_pManager = nullptr;

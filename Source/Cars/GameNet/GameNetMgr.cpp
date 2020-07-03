@@ -5,6 +5,7 @@
 #include "Game/CarsGameInstance.h"
 #include "Engine/LevelStreaming.h"
 #include "Game/Car.h"
+#include "Game/Trap.h"
 #include "GameNet/NetComponent.h"
 
 CGameNetMgr::CGameNetMgr() : m_pCarsGameInstance(nullptr)
@@ -117,9 +118,23 @@ void CGameNetMgr::CreateCar(unsigned int _uClient, FVector _vPos)
   ACar* pCar = m_pCarsGameInstance->GetWorld()->SpawnActor<ACar>(_vPos, FRotator::ZeroRotator, oSpawnInfo);
   if (pCar)
   {
+    pCar->SetManager(this);
     m_vPlayers[_uClient] = pCar;
     m_tPlayerIDs[pCar] = _uClient;
   }
+}
+
+void CGameNetMgr::CreateTrap(ACar* _pCar)
+{
+
+    unsigned int uID  = m_tPlayerIDs[_pCar];
+
+    FActorSpawnParameters oSpawnInfo;
+    oSpawnInfo.Name = FName("Trap", uID);
+    oSpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+    ATrap* pTrap = m_pCarsGameInstance->GetWorld()->SpawnActor<ATrap>(_pCar->GetActorLocation(), FRotator::ZeroRotator, oSpawnInfo);
+    pTrap->SetClient(uID);
+
 }
 
 ACar* CGameNetMgr::GetOwnCar() const
