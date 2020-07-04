@@ -121,6 +121,8 @@ void CGameNetMgr::CreateCar(unsigned int _uClient, FVector _vPos)
     pCar->SetManager(this);
     m_vPlayers[_uClient] = pCar;
     m_tPlayerIDs[pCar] = _uClient;
+    CreateTrap(pCar);
+    
   }
 }
 
@@ -132,7 +134,8 @@ void CGameNetMgr::CreateTrap(ACar* _pCar)
     FActorSpawnParameters oSpawnInfo;
     oSpawnInfo.Name = FName("Trap", uID);
     oSpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-    ATrap* pTrap = m_pCarsGameInstance->GetWorld()->SpawnActor<ATrap>(_pCar->GetActorLocation(), FRotator::ZeroRotator, oSpawnInfo);
+    ATrap* pTrap = m_pCarsGameInstance->GetWorld()->SpawnActor<ATrap>(FVector(9999999999, 999999999, 999999), FRotator::ZeroRotator, oSpawnInfo);
+    _pCar->SetTrap(pTrap);
     pTrap->SetClient(uID);
 
 }

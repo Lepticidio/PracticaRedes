@@ -29,7 +29,12 @@ protected:
 	UStaticMeshComponent* m_pMesh;
 	UPROPERTY(EditAnywhere)
 	unsigned int m_uClient;
+	UPROPERTY(EditAnywhere)
+	FVector m_vOutsidePosition;
 public:
+
+	FVector GetOutsidePosition() { return m_vOutsidePosition; }
+
 	UFUNCTION()
 		unsigned int GetClient();
 	UFUNCTION()

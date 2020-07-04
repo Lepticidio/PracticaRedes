@@ -9,6 +9,7 @@
 class UCarMovementComponent;
 class UNetComponent;
 class CGameNetMgr;
+class ATrap;
 
 UCLASS()
 class CARS_API ACar : public APawn
@@ -27,11 +28,17 @@ public:
 
   void SetInput(const FVector2D& _vInput) { m_vMovementInput = _vInput; }
   void SetManager(CGameNetMgr* _newValue);
+  void SetTrap(ATrap* _pTrap) { m_pTrap = _pTrap; }
+  FVector GetTrapPosition();
 
   UNetComponent* GetNetComponent() const { return m_pNet; }
   UCarMovementComponent* GetCarMovement() { return m_pCarMovement; }
 
+  ATrap* GetTrap() { return m_pTrap; }
+
 protected:
+	FVector m_vTrapPosition;
+	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -52,6 +59,8 @@ protected:
   UNetComponent* m_pNet;
 
   CGameNetMgr* m_pManager;
+
+  ATrap* m_pTrap;
 
 
   //Input

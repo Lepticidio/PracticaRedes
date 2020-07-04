@@ -62,7 +62,8 @@ void ACar::Turn(float AxisValue)
 }
 void ACar::CreateTrap()
 {
-	m_pManager->CreateTrap(this);
+	m_vTrapPosition = GetActorLocation();
+	m_pNet->SetTrapPosition(m_vTrapPosition);
 }
 
 void ACar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -81,4 +82,8 @@ float ACar::GetVelocityMagnitude() const
 void ACar::SetManager(CGameNetMgr* _newValue)
 {
 	m_pManager = _newValue;
+}
+FVector ACar::GetTrapPosition()
+{
+	return m_vTrapPosition;
 }

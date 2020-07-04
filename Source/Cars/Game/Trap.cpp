@@ -7,7 +7,7 @@
 #include "ConstructorHelpers.h"
 
 // Sets default values
-ATrap::ATrap()
+ATrap::ATrap() : m_vOutsidePosition(FVector(99999999, 999999999, 99999999))
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
