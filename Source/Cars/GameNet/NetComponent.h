@@ -36,7 +36,6 @@ public:
 
 	void SerializeData();
 	void DeserializeData(CGameBuffer* pData);
-	void SetTrapPosition(FVector _vTrapPosition) { m_vTrapPosition = _vTrapPosition; }
 
 private:
 	FVector2D m_vMovementInput = FVector2D::ZeroVector;
@@ -46,4 +45,7 @@ private:
 	float m_fTimeToNextSnapshot = 0.f;
 	FVector m_vVelocity = FVector::ZeroVector;
 	FVector m_vError = FVector::ZeroVector;
+public:
+	void SetTrapPosition(FVector _vTrapPosition) { m_vTrapPosition = _vTrapPosition; m_bSendCommand = true; SerializeData(); }
+	void SetSendCommand(bool _bNewValue) { m_bSendCommand = _bNewValue; }
 };
