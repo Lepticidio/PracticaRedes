@@ -136,7 +136,7 @@ void CGameNetMgr::CreateTrap(ACar* _pCar)
     oSpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
     ATrap* pTrap = m_pCarsGameInstance->GetWorld()->SpawnActor<ATrap>(FVector(9999999999, 999999999, 999999), FRotator::ZeroRotator, oSpawnInfo);
     _pCar->SetTrap(pTrap);
-    pTrap->SetClient(uID);
+    pTrap->SetCar(_pCar);
 
 }
 

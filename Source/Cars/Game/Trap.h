@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Trap.generated.h"
 
+class ACar;
 UCLASS()
 class CARS_API ATrap : public AActor
 {
@@ -28,15 +29,19 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* m_pMesh;
 	UPROPERTY(EditAnywhere)
-	unsigned int m_uClient;
-	UPROPERTY(EditAnywhere)
 	FVector m_vOutsidePosition;
+	UPROPERTY(EditAnywhere)
+	float m_fEffectDuration;
+
+	ACar* m_pCar;
+
+	UFUNCTION()
+	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 public:
 
 	FVector GetOutsidePosition() { return m_vOutsidePosition; }
+	float GetEffectDuration() { return m_fEffectDuration; }
 
-	UFUNCTION()
-		unsigned int GetClient();
-	UFUNCTION()
-		void SetClient(unsigned int _uNewValue);
+	void SetCar(ACar* _pCar) { m_pCar = _pCar; }
+
 };

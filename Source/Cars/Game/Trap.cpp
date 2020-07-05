@@ -2,12 +2,13 @@
 
 
 #include "Trap.h"
+#include "Game/Car.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "ConstructorHelpers.h"
 
 // Sets default values
-ATrap::ATrap() : m_vOutsidePosition(FVector(99999999, 999999999, 99999999))
+ATrap::ATrap() : m_vOutsidePosition(FVector(99999999, 999999999, 99999999)), m_fEffectDuration(1)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -23,7 +24,8 @@ ATrap::ATrap() : m_vOutsidePosition(FVector(99999999, 999999999, 99999999))
 		m_pMesh->SetMaterial(0, TrapMaterial.Object);
 	}
 	SetActorScale3D(FVector(0.1f, 0.1f, 0.1f));
-
+	m_pMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	m_pMesh->OnComponentBeginOverlap.AddDynamic(this, &ATrap::OnOverlapBegin);
 }
 
 // Called when the game starts or when spawned
@@ -39,11 +41,16 @@ void ATrap::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-unsigned int ATrap::GetClient()
+void ATrap::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	return m_uClient;
-}
-void ATrap::SetClient(unsigned int _uNewValue)
-{
-	m_uClient = _uNewValue;
+	ACar* pCar = Cast<ACar>(OtherActor);
+	if (pCar != nullptr)
+	{
+		if (pCar != m_pCar)
+		{
+			pCar->SetInputBlocked(true);
+			SetActorLocation(m_vOutsidePosition);
+			m_pCar->SetTrapPosition(m_vOutsidePosition);
+		}
+	}
 }

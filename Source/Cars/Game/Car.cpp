@@ -15,10 +15,12 @@ ACar::ACar()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	m_bInputBlocked = false;
 	UBoxComponent* BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
 	RootComponent = BoxComponent;
 	m_pMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
 	m_pMesh->SetupAttachment(RootComponent);
+	m_pMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BoxVisualAsset(TEXT("/Engine/BasicShapes/Cube"));
 	if (BoxVisualAsset.Succeeded())
 	{
@@ -48,7 +50,22 @@ void ACar::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	//  m_pCarMovement->SetInput(m_vMovementInput);
-	m_pNet->SetInput(m_vMovementInput);
+	if (!m_bInputBlocked)
+	{
+		m_pNet->SetInput(m_vMovementInput);
+	}
+	else
+	{
+		if (m_fTimeBlocked < m_pTrap->GetEffectDuration())
+		{
+			m_fTimeBlocked += DeltaTime;
+		}
+		else
+		{
+			m_bInputBlocked = false;
+			m_fTimeBlocked = 0;
+		}
+	}
 }
 
 void ACar::Move(float AxisValue)
@@ -86,4 +103,10 @@ void ACar::SetManager(CGameNetMgr* _newValue)
 FVector ACar::GetTrapPosition()
 {
 	return m_vTrapPosition;
+}
+
+void ACar::SetTrapPosition(FVector _vTrapPosition)
+{ 
+	m_vTrapPosition = _vTrapPosition;
+	m_pNet->SetTrapPosition(m_vTrapPosition);
 }

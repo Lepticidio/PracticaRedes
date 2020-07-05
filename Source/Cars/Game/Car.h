@@ -37,6 +37,8 @@ public:
   ATrap* GetTrap() { return m_pTrap; }
 
 protected:
+	bool m_bInputBlocked;
+	float m_fTimeBlocked;
 	FVector m_vTrapPosition;
 	
 	// Called when the game starts or when spawned
@@ -65,4 +67,7 @@ protected:
 
   //Input
   FVector2D m_vMovementInput = FVector2D::ZeroVector;
+public:
+	void SetInputBlocked(bool _bNewValue) { m_bInputBlocked = _bNewValue; }
+	void SetTrapPosition(FVector _vTrapPosition);
 };
